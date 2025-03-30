@@ -1,19 +1,26 @@
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
+
+-- Определение типа устройства
+local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
 -- Создание ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = LocalPlayer.PlayerGui
 screenGui.ResetOnSpawn = false
 
--- Основной Frame (400x400)
+-- Определение размеров в зависимости от устройства
+local frameSize = isMobile and UDim2.new(0, 250, 0, 250) or UDim2.new(0, 400, 0, 400)
+
+-- Основной Frame
 local mainFrame = Instance.new("Frame")
 mainFrame.Parent = screenGui
-mainFrame.Size = UDim2.new(0, 400, 0, 400)
-mainFrame.Position = UDim2.new(0.5, -200, -0.5, -200)  -- Начинает за пределами экрана
-mainFrame.BackgroundColor3 = Color3.fromRGB(28, 31, 35)  -- Темный фон
+mainFrame.Size = frameSize
+mainFrame.Position = UDim2.new(0.5, -frameSize.X.Offset/2, -0.5, -frameSize.Y.Offset/2)  -- Начинает за пределами экрана
+mainFrame.BackgroundColor3 = Color3.fromRGB(28, 31, 35)
 mainFrame.BorderSizePixel = 0
 mainFrame.Visible = true
 
@@ -28,33 +35,33 @@ local uiCorner = Instance.new("UICorner")
 uiCorner.CornerRadius = UDim.new(0, 15)
 uiCorner.Parent = mainFrame
 
--- Надпись "z0nxx hub" (центрирована)
+-- Надпись "z0nxx hub"
 local title = Instance.new("TextLabel")
 title.Parent = mainFrame
-title.Size = UDim2.new(1, 0, 0, 100)
-title.Position = UDim2.new(0, 0, 0, 100)  -- Чуть ниже
+title.Size = UDim2.new(1, 0, 0, isMobile and 60 or 100)
+title.Position = UDim2.new(0, 0, 0, isMobile and 60 or 100)
 title.BackgroundTransparency = 1
 title.Text = "z0nxx hub"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.Font = Enum.Font.GothamBlack
-title.TextSize = 72
+title.TextSize = isMobile and 48 or 72
 title.TextStrokeTransparency = 0.8
 title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-title.TextXAlignment = Enum.TextXAlignment.Center  -- Центрируем текст
+title.TextXAlignment = Enum.TextXAlignment.Center
 
--- Надпись "V 2" (центрирована)
+-- Надпись "V 2"
 local versionLabel = Instance.new("TextLabel")
 versionLabel.Parent = mainFrame
-versionLabel.Size = UDim2.new(1, 0, 0, 50)
-versionLabel.Position = UDim2.new(0, 0, 0, 200)  -- Ниже "z0nxx hub"
+versionLabel.Size = UDim2.new(1, 0, 0, isMobile and 30 or 50)
+versionLabel.Position = UDim2.new(0, 0, 0, isMobile and 120 or 200)
 versionLabel.BackgroundTransparency = 1
 versionLabel.Text = "V 2"
 versionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 versionLabel.Font = Enum.Font.GothamBlack
-versionLabel.TextSize = 36
+versionLabel.TextSize = isMobile and 24 or 36
 versionLabel.TextStrokeTransparency = 0.8
 versionLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-versionLabel.TextXAlignment = Enum.TextXAlignment.Center  -- Центрируем текст
+versionLabel.TextXAlignment = Enum.TextXAlignment.Center
 
 -- Анимация переливания цвета для обеих надписей
 local function animateLabels()
@@ -78,13 +85,13 @@ spawn(animateLabels)
 -- Кнопка "Run Script"
 local runButton = Instance.new("TextButton")
 runButton.Parent = mainFrame
-runButton.Size = UDim2.new(0, 150, 0, 50)
-runButton.Position = UDim2.new(0.5, -75, 0, 300)
+runButton.Size = UDim2.new(0, isMobile and 100 or 150, 0, isMobile and 35 or 50)
+runButton.Position = UDim2.new(0.5, -(isMobile and 50 or 75), 0, isMobile and 180 or 300)
 runButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 runButton.Text = "Run Script"
 runButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 runButton.Font = Enum.Font.SourceSansBold
-runButton.TextSize = 24
+runButton.TextSize = isMobile and 18 or 24
 runButton.BorderSizePixel = 0
 local buttonCorner = Instance.new("UICorner")
 buttonCorner.CornerRadius = UDim.new(0, 10)
@@ -93,26 +100,26 @@ buttonCorner.Parent = runButton
 -- Текст загрузки
 local progressLabel = Instance.new("TextLabel")
 progressLabel.Parent = mainFrame
-progressLabel.Size = UDim2.new(1, 0, 0, 50)
-progressLabel.Position = UDim2.new(0, 0, 0, 250)  -- Ниже
+progressLabel.Size = UDim2.new(1, 0, 0, isMobile and 30 or 50)
+progressLabel.Position = UDim2.new(0, 0, 0, isMobile and 150 or 250)
 progressLabel.BackgroundTransparency = 1
 progressLabel.Text = ""
 progressLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 progressLabel.Font = Enum.Font.SourceSans
-progressLabel.TextSize = 32
+progressLabel.TextSize = isMobile and 20 or 32
 progressLabel.TextXAlignment = Enum.TextXAlignment.Center
 progressLabel.Visible = false
 
--- Надпись "Access" (перемещена ниже)
+-- Надпись "Access"
 local accessLabel = Instance.new("TextLabel")
 accessLabel.Parent = mainFrame
-accessLabel.Size = UDim2.new(1, 0, 0, 100)
-accessLabel.Position = UDim2.new(0, 0, 0, 250)  -- Ещё ниже, чем было
+accessLabel.Size = UDim2.new(1, 0, 0, isMobile and 60 or 100)
+accessLabel.Position = UDim2.new(0, 0, 0, isMobile and 150 or 250)
 accessLabel.BackgroundTransparency = 1
 accessLabel.Text = "Access"
 accessLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 accessLabel.Font = Enum.Font.GothamBlack
-accessLabel.TextSize = 64
+accessLabel.TextSize = isMobile and 40 or 64
 accessLabel.TextXAlignment = Enum.TextXAlignment.Center
 accessLabel.Visible = false
 
@@ -120,7 +127,7 @@ accessLabel.Visible = false
 local function showGUI()
     local tweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
     local frameTween = TweenService:Create(mainFrame, tweenInfo, {
-        Position = UDim2.new(0.5, -200, 0.5, -200)
+        Position = UDim2.new(0.5, -frameSize.X.Offset/2, 0.5, -frameSize.Y.Offset/2)
     })
     frameTween:Play()
 end
@@ -158,7 +165,7 @@ runButton.MouseButton1Click:Connect(function()
         -- Закрытие GUI
         local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
         local frameTween = TweenService:Create(mainFrame, tweenInfo, {
-            Position = UDim2.new(0.5, -200, 1.5, 0)
+            Position = UDim2.new(0.5, -frameSize.X.Offset/2, 1.5, 0)
         })
         frameTween:Play()
         frameTween.Completed:Connect(function()
