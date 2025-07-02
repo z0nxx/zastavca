@@ -173,9 +173,6 @@ runButton.MouseButton1Click:Connect(function()
             -- Запуск скрипта отправки сообщений
             local messages = {
                 "✅ z0nxx hub ✅",
-                "✅ z0nxx hub ✅",
-                "✅ z0nxx hub ✅",
-                "✅ z0nxx hub ✅",
                 "✅ z0nxx hub ✅"
             }
             local function sendMessage(message)
